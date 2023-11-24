@@ -2,9 +2,82 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.get("/", (req, res) => res.type('html').send(html));
+// Endpoint para Página de Configuração e Parâmetros
+app.get("/configuracao-atividade", (req, res) => {
+  const configPage = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Configuração da Atividade</title>
+      </head>
+      <body>
+        <h1>Página de Configuração da Atividade</h1>
+        <!-- Adicione aqui os campos de configuração conforme necessário -->
+      </body>
+    </html>
+  `;
+  res.type('html').send(configPage);
+});
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// Endpoint para JSON de Parâmetros
+app.get("/json-params-atividade", (req, res) => {
+  const jsonParams = {
+    "name": "Atividade Exemplo",
+    "config_url": "https://health-tracker-apds.onrender.com/configuracao-atividade",
+    "json_params_url": "https://health-tracker-apds.onrender.com/json-params-atividade",
+    // Adicione outros parâmetros conforme necessário
+  };
+  res.json(jsonParams);
+});
+
+// Endpoint para Lista de Analytics
+app.get("/lista-analytics-atividade", (req, res) => {
+  const analyticsList = {
+    "qualAnalytics": [
+      {"name": "Analytics Qualitativo 1", "type": "text/plain"},
+      {"name": "Analytics Qualitativo 2", "type": "URL"}
+    ],
+    "quantAnalytics": [
+      {"name": "Analytics Quantitativo 1", "type": "boolean"},
+      {"name": "Analytics Quantitativo 2", "type": "integer"}
+    ]
+  };
+  res.json(analyticsList);
+});
+
+// Endpoint para Deploy da Atividade
+app.get("/deploy-atividade", (req, res) => {
+  // Lógica para processar o deploy da atividade
+  // Retorna o URL para acessar a atividade
+  const deployURL = "https://health-tracker-apds.onrender.com/atividade12345";
+  res.send(deployURL);
+});
+
+// Endpoint para Analytics da Atividade
+app.post("/analytics-atividade", (req, res) => {
+  // Lógica para processar o pedido de analytics da atividade
+  // Retorna os dados analíticos em formato JSON
+  const analyticsData = [
+    {
+      "inveniraStdID": 1001,
+      "quantAnalytics": [
+        {"name": "Acedeu à atividade", "value": true},
+        {"name": "Download documento 1", "value": true},
+        {"name": "Evolução pela atividade (%)", "value": "33.3"}
+      ],
+      "qualAnalytics": [
+        {"Student activity profile": "https://health-tracker-apds.onrender.com/?APAnID=11111111"},
+        {"Actitivy Heat Map": "https://health-tracker-apds.onrender.com/?APAnID=21111111"}
+      ]
+    },
+    // Adicione outros dados conforme necessário
+  ];
+  res.json(analyticsData);
+});
+
+// Seu código existente aqui
+
+const server = app.listen(port, () => console.log(`App listening on port ${port}!`));
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
@@ -58,4 +131,4 @@ const html = `
     </section>
   </body>
 </html>
-`
+`;
