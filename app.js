@@ -2,17 +2,79 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
+// Endpoint para Página Inicial
+app.get("/", (req, res) => {
+  const homePage = `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Health Tracker</title>
+      </head>
+      <body>
+        <h1>Bem-vindo ao Health Tracker!</h1>
+        <p>Este projeto tem como objetivo incentivar a consciencialização dos alunos sobre a saúde e bem-estar.</p>
+        <p>Utilize os seguintes links para navegar:</p>
+        <ul>
+          <li><a href="/configuracao-atividade">Configuração da Atividade</a></li>
+          <li><a href="/json-params-atividade">JSON de Parâmetros</a></li>
+          <li><a href="/lista-analytics-atividade">Lista de Analytics</a></li>
+          <li><a href="/deploy-atividade">Deploy da Atividade</a></li>
+          <li><a href="/analytics-atividade">Analytics da Atividade</a></li>
+        </ul>
+      </body>
+    </html>
+  `;
+  res.type('html').send(homePage);
+});
+
 // Endpoint para Página de Configuração e Parâmetros
 app.get("/configuracao-atividade", (req, res) => {
   const configPage = `
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
       <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Configuração da Atividade</title>
       </head>
       <body>
         <h1>Página de Configuração da Atividade</h1>
-        <!-- Adicione aqui os campos de configuração conforme necessário -->
+        <form action="/json-params-atividade" method="get">
+          <label for="habitos_alimentares">Hábitos Alimentares:</label>
+          <input type="text" id="habitos_alimentares" name="habitos_alimentares"><br>
+
+          <label for="consumo_calorias_diarias">Consumo Diário de Calorias:</label>
+          <input type="number" id="consumo_calorias_diarias" name="consumo_calorias_diarias"><br>
+
+          <label for="peso">Peso:</label>
+          <input type="number" id="peso" name="peso"><br>
+
+          <label for="altura">Altura:</label>
+          <input type="number" id="altura" name="altura"><br>
+
+          <label for="pressao_arterial">Pressão Arterial:</label>
+          <input type="text" id="pressao_arterial" name="pressao_arterial"><br>
+
+          <label for="niveis_glicose">Níveis de Glicose:</label>
+          <input type="number" id="niveis_glicose" name="niveis_glicose"><br>
+
+          <label for="passos_diarios">Número de Passos Diários:</label>
+          <input type="number" id="passos_diarios" name="passos_diarios"><br>
+
+          <label for="horas_sono_noite">Horas de Sono por Noite:</label>
+          <input type="number" id="horas_sono_noite" name="horas_sono_noite"><br>
+
+          <label for="atividades_desportivas">Atividades Desportivas:</label>
+          <input type="text" id="atividades_desportivas" name="atividades_desportivas"><br>
+
+          <label for="tempo_gasto_atividades_fisicas">Tempo Gasto em Atividades Físicas:</label>
+          <input type="text" id="tempo_gasto_atividades_fisicas" name="tempo_gasto_atividades_fisicas"><br>
+
+          <input type="submit" value="Submit">
+        </form>
+        <a href="/">Voltar para a Página Inicial</a>
       </body>
     </html>
   `;
@@ -22,7 +84,7 @@ app.get("/configuracao-atividade", (req, res) => {
 // Endpoint para JSON de Parâmetros
 app.get("/json-params-atividade", (req, res) => {
   const jsonParams = [
-    {"name": "hábitos_alimentares", "type": "text/plain"},
+    {"name": "habitos_alimentares", "type": "text/plain"},
     {"name": "consumo_calorias_diarias", "type": "integer"},
     {"name": "peso", "type": "float"},
     {"name": "altura", "type": "float"},
