@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
       <body>
         <h1>Bem-vindo ao Health Tracker!</h1>
         <p>Este projeto tem como objetivo incentivar a consciencialização dos alunos sobre a saúde e bem-estar.</p>
+        <p>Projeto desenvolvido pelo aluno André Pereira [2302569]</p>
         <p>Utilize os seguintes links para navegar:</p>
         <ul>
           <li><a href="/configuracao-atividade">Configuração da Atividade</a></li>
