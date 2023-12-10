@@ -2,18 +2,18 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Singleton para gerenciar dados da atividade
+// Implementação do Singleton para gerir os dados da atividade
 class ActivityManager {
   constructor() {
     if (!ActivityManager.instance) {
-      // Se não existir uma instância, cria uma nova
-      this.data = {}; // Estrutura para armazenar dados da atividade
+      // Se não existir uma instância, é criada uma nova
+      this.data = {}; // Estrutura para armazenar osdados da atividade
       ActivityManager.instance = this;
     }
     return ActivityManager.instance;
   }
 
-  // Métodos para acessar e manipular dados da atividade
+  // Métodos para acessar e manipular os dados da atividade
   getData() {
     return this.data;
   }
@@ -141,16 +141,12 @@ app.get("/lista-analytics-atividade", (req, res) => {
 
 // Endpoint para Deploy da Atividade
 app.get("/deploy-atividade", (req, res) => {
-  // Lógica para processar o deploy da atividade
-  // Retorna o URL para acessar a atividade
   const deployURL = "https://health-tracker-apds.onrender.com/atividade12345";
   res.send(deployURL);
 });
 
 // Endpoint para Analytics da Atividade
 app.post("/analytics-atividade", (req, res) => {
-  // Lógica para processar o pedido de analytics da atividade
-  // Retorna os dados analíticos em formato JSON
   const analyticsData = [
     {
       "inveniraStdID": 1001,
@@ -165,7 +161,6 @@ app.post("/analytics-atividade", (req, res) => {
         {"Actitivy Heat Map": "https://health-tracker-apds.onrender.com/?APAnID=21111111"}
       ]
     },
-    // Adicione outros dados conforme necessário
   ];
   res.json(analyticsData);
 });
