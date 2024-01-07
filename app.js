@@ -2,29 +2,62 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Implementação do Singleton para gerir os dados da atividade
-class ActivityManager {
-  constructor() {
-    if (!ActivityManager.instance) {
-      // Se não existir uma instância, é criada uma nova
-      this.data = {}; // Estrutura para armazenar osdados da atividade
-      ActivityManager.instance = this;
-    }
-    return ActivityManager.instance;
-  }
-
-  // Métodos para acessar e manipular os dados da atividade
-  getData() {
-    return this.data;
-  }
-
-  setData(newData) {
-    this.data = newData;
+// Interface comum para análises de atividade
+class ActivityAnalysis {
+  getResults() {
+    return "Results from the base analysis";
   }
 }
 
-// Cria uma instância única do ActivityManager
-const activityManager = new ActivityManager();
+// Implementação concreta de análise quantitativa
+class QuantitativeAnalysis extends ActivityAnalysis {
+  getResults() {
+    return "Quantitative Analysis Results";
+  }
+}
+
+// Implementação concreta de análise qualitativa
+class QualitativeAnalysis extends ActivityAnalysis {
+  getResults() {
+    return "Qualitative Analysis Results";
+  }
+}
+
+// Decorator base para análises
+class AnalysisDecorator extends ActivityAnalysis {
+  constructor(analysis) {
+    super();
+    this.analysis = analysis;
+  }
+
+  getResults() {
+    return this.analysis.getResults();
+  }
+}
+
+// Decorator específico que adiciona funcionalidade extra à análise
+class AdditionalFunctionalityDecorator extends AnalysisDecorator {
+  getResults() {
+    // Chama a implementação da análise subjacente e adiciona funcionalidade extra
+    const baseResults = super.getResults();
+    return `${baseResults} with additional functionality`;
+  }
+}
+
+// Cria uma instância de análise quantitativa
+const quantitativeAnalysis = new QuantitativeAnalysis();
+
+// Cria uma instância de análise qualitativa
+const qualitativeAnalysis = new QualitativeAnalysis();
+
+// Decora uma análise quantitativa com funcionalidade adicional
+const decoratedQuantitativeAnalysis = new AdditionalFunctionalityDecorator(quantitativeAnalysis);
+
+// Endpoint para demonstração
+app.get("/demo", (req, res) => {
+  // Exibe os resultados da análise decorada
+  res.send(decoratedQuantitativeAnalysis.getResults());
+});
 
 // Endpoint para Página Inicial
 app.get("/", (req, res) => {
@@ -165,7 +198,7 @@ app.post("/analytics-atividade", (req, res) => {
   res.json(analyticsData);
 });
 
-// Rota padrão para lidar com todas as outras solicitações
+
 app.get("/", (req, res) => {
   res.send("Bem-vindo ao Health Tracker!");
 });
@@ -174,6 +207,43 @@ const server = app.listen(port, () => console.log(`App listening on port ${port}
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
+
+
+
+
+// CÓDIGO ANTIGO DA IMPLEMENTAÇÃO DO SINGLETON
+// // Implementação do Singleton para gerir os dados da atividade
+// class ActivityManager {
+//   constructor() {
+//     if (!ActivityManager.instance) {
+//       // Se não existir uma instância, é criada uma nova
+//       this.data = {}; // Estrutura para armazenar osdados da atividade
+//       ActivityManager.instance = this;
+//     }
+//     return ActivityManager.instance;
+//   }
+
+//   // Métodos para acessar e manipular os dados da atividade
+//   getData() {
+//     return this.data;
+//   }
+
+//   setData(newData) {
+//     this.data = newData;
+//   }
+// }
+
+// // Cria uma instância única do ActivityManager
+// const activityManager = new ActivityManager();
+
+
+
+
+
+
+
+
+
 //CÓDIGO ANTIGO PRIMEIRA PARTE
 // const express = require("express");
 // const app = express();
