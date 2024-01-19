@@ -2,61 +2,94 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Interface comum para análises de atividade
-class ActivityAnalysis {
-  getResults() {
-    return "Results from the base analysis";
+//PADRÃO OBSERVER
+class ActivityObserver {
+  update(activityData) {
+    
   }
 }
 
-// Implementação concreta de análise quantitativa
-class QuantitativeAnalysis extends ActivityAnalysis {
-  getResults() {
-    return "Quantitative Analysis Results";
+// Classe ActivitySubject que rastreia os observadores e notifica sobre as alterações
+class ActivitySubject {
+  constructor() {
+    this.observers = [];
+  }
+
+  addObserver(observer) {
+    this.observers.push(observer);
+  }
+
+  removeObserver(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  notifyObservers(activityData) {
+    this.observers.forEach(observer => observer.update(activityData));
   }
 }
 
-// Implementação concreta de análise qualitativa
-class QualitativeAnalysis extends ActivityAnalysis {
-  getResults() {
-    return "Qualitative Analysis Results";
+
+class QuantitativeAnalysisObserver extends ActivityObserver {
+  update(activityData) {
+    console.log("Quantitative Analysis Observer: Atualizado com novos dados -", activityData);
   }
 }
 
-// Decorator base para análises
-class AnalysisDecorator extends ActivityAnalysis {
-  constructor(analysis) {
-    super();
-    this.analysis = analysis;
-  }
 
-  getResults() {
-    return this.analysis.getResults();
+class QualitativeAnalysisObserver extends ActivityObserver {
+  update(activityData) {
+    console.log("Qualitative Analysis Observer: Atualizado com novos dados -", activityData);
   }
 }
 
-// Decorator específico que adiciona funcionalidade extra à análise
-class AdditionalFunctionalityDecorator extends AnalysisDecorator {
-  getResults() {
-    // Chama a implementação da análise subjacente e adiciona funcionalidade extra
-    const baseResults = super.getResults();
-    return `${baseResults} with additional functionality`;
-  }
-}
+// Cria uma instância ActivitySubject
+const activitySubject = new ActivitySubject();
 
-// Cria uma instância de análise quantitativa
-const quantitativeAnalysis = new QuantitativeAnalysis();
+// Cria instâncias de observadores
+const quantitativeObserver = new QuantitativeAnalysisObserver();
+const qualitativeObserver = new QualitativeAnalysisObserver();
 
-// Cria uma instância de análise qualitativa
-const qualitativeAnalysis = new QualitativeAnalysis();
+// Adiciona observadores ao sujeito
+activitySubject.addObserver(quantitativeObserver);
+activitySubject.addObserver(qualitativeObserver);
 
-// Decora uma análise quantitativa com funcionalidade adicional
-const decoratedQuantitativeAnalysis = new AdditionalFunctionalityDecorator(quantitativeAnalysis);
+// Exemplo: Notifica observadores quando há novos dados da atividade
+const novosDadosAtividade = {
+  habitos: "Alimentação saudável",
+  calorias: 2000,
+  peso: 70,
+  altura: 1.75,
+  pressao_arterial: "120/80",
+  niveis_glicose: 90,
+  passos_diarios: 10000,
+  horas_sono_noite: 8,
+  atividades_desportivas: "Corrida, Natação",
+  tempo_gasto_atividades_fisicas: "60 minutos",
+};
+// Notifica observadores sobre os novos dados
+activitySubject.notifyObservers(novosDadosAtividade);
 
 // Endpoint para demonstração
 app.get("/demo", (req, res) => {
-  // Exibe os resultados da análise decorada
-  res.send(decoratedQuantitativeAnalysis.getResults());
+
+  // Simulação de novos dados da atividade com novos dados
+  const novosDadosAtividade = {
+    habitos: "Alimentação saudável",
+    calorias: 1800, 
+    peso: 68, 
+    altura: 1.76, 
+    pressao_arterial: "118/78", 
+    niveis_glicose: 88, 
+    passos_diarios: 10500,
+    horas_sono_noite: 7.5, 
+    atividades_desportivas: "Corrida, Natação, Yoga", 
+    tempo_gasto_atividades_fisicas: "75 minutos", 
+  };
+
+
+  activitySubject.notifyObservers(novosDadosAtividade);
+
+  res.send("Simulação de novos dados da atividade concluída. Verifique os logs para observar as atualizações.");
 });
 
 // Endpoint para Página Inicial
@@ -209,6 +242,73 @@ server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
 
 
+
+
+
+
+
+
+
+
+
+
+// //CÓDIGO ANTIGO DO PADRÃO DECORATOR
+// // Interface comum para análises de atividade
+// class ActivityAnalysis {
+//   getResults() {
+//     return "Results from the base analysis";
+//   }
+// }
+
+// // Implementação concreta de análise quantitativa
+// class QuantitativeAnalysis extends ActivityAnalysis {
+//   getResults() {
+//     return "Quantitative Analysis Results";
+//   }
+// }
+
+// // Implementação concreta de análise qualitativa
+// class QualitativeAnalysis extends ActivityAnalysis {
+//   getResults() {
+//     return "Qualitative Analysis Results";
+//   }
+// }
+
+// // Decorator base para análises
+// class AnalysisDecorator extends ActivityAnalysis {
+//   constructor(analysis) {
+//     super();
+//     this.analysis = analysis;
+//   }
+
+//   getResults() {
+//     return this.analysis.getResults();
+//   }
+// }
+
+// // Decorator específico que adiciona funcionalidade extra à análise
+// class AdditionalFunctionalityDecorator extends AnalysisDecorator {
+//   getResults() {
+//     // Chama a implementação da análise subjacente e adiciona funcionalidade extra
+//     const baseResults = super.getResults();
+//     return `${baseResults} with additional functionality`;
+//   }
+// }
+
+// // Cria uma instância de análise quantitativa
+// const quantitativeAnalysis = new QuantitativeAnalysis();
+
+// // Cria uma instância de análise qualitativa
+// const qualitativeAnalysis = new QualitativeAnalysis();
+
+// // Decora uma análise quantitativa com funcionalidade adicional
+// const decoratedQuantitativeAnalysis = new AdditionalFunctionalityDecorator(quantitativeAnalysis);
+
+// // Endpoint para demonstração
+// app.get("/demo", (req, res) => {
+//   // Exibe os resultados da análise decorada
+//   res.send(decoratedQuantitativeAnalysis.getResults());
+// });
 
 
 // CÓDIGO ANTIGO DA IMPLEMENTAÇÃO DO SINGLETON
